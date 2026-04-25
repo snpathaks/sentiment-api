@@ -26,9 +26,7 @@ from pydantic import BaseModel, Field, field_validator
 
 from app.model_loader import get_model, DEFAULT_MODEL
 
-# ---------------------------------------------------------------------------
-# Logging
-# ---------------------------------------------------------------------------
+
 
 logging.basicConfig(
     level=logging.INFO,
@@ -37,16 +35,9 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# ---------------------------------------------------------------------------
-# Constants
-# ---------------------------------------------------------------------------
-
 MAX_BATCH_SIZE = 64
-MAX_TEXT_LENGTH = 5_000  # characters (model still truncates at 512 tokens)
+MAX_TEXT_LENGTH = 5_000 
 
-# ---------------------------------------------------------------------------
-# Lifespan – warm up the model before the server starts accepting traffic
-# ---------------------------------------------------------------------------
 
 
 @asynccontextmanager
@@ -59,9 +50,7 @@ async def lifespan(app: FastAPI):
     logger.info("🛑  Shutting down Sentiment-as-a-Service.")
 
 
-# ---------------------------------------------------------------------------
-# App factory
-# ---------------------------------------------------------------------------
+
 
 app = FastAPI(
     title="Sentiment-as-a-Service",
@@ -75,7 +64,6 @@ app = FastAPI(
     redoc_url="/redoc",
 )
 
-# Allow all origins in development; tighten in production.
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -84,9 +72,7 @@ app.add_middleware(
 )
 
 
-# ---------------------------------------------------------------------------
-# Pydantic schemas
-# ---------------------------------------------------------------------------
+
 
 
 class TextRequest(BaseModel):
@@ -164,18 +150,12 @@ class HealthResponse(BaseModel):
     model_loaded: bool
 
 
-# ---------------------------------------------------------------------------
-# Helper
-# ---------------------------------------------------------------------------
 
 
 def _ms(start: float) -> float:
     return round((time.perf_counter() - start) * 1_000, 3)
 
 
-# ---------------------------------------------------------------------------
-# Routes
-# ---------------------------------------------------------------------------
 
 
 @app.get(
