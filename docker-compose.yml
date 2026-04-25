@@ -1,90 +1,58 @@
-# =============================================================================
-# docker-compose.yml – Sentiment-as-a-Service
-# =============================================================================
-# Usage
-# -----
-#   Build & start:   docker compose up --build
-#   Background:      docker compose up --build -d
-#   Logs:            docker compose logs -f sentiment-api
-#   Stop & remove:   docker compose down
-#
-# Override the model at build time (optional)
-# -------------------------------------------
-#   MODEL_NAME=distilbert-base-uncased-finetuned-sst-2-english \
-#     docker compose up --build
-# =============================================================================
+
 
 services:
 
-  # ---------------------------------------------------------------------------
-  # sentiment-api – the FastAPI inference service
-  # ---------------------------------------------------------------------------
   sentiment-api:
     build:
       context: .
       dockerfile: Dockerfile
-      # Pass the model name through to the builder stage ARG.
-      # Override with: MODEL_NAME=<other-model> docker compose up --build
+   
       args:
         MODEL_NAME: ${MODEL_NAME:-cardiffnlp/twitter-roberta-base-sentiment-latest}
 
     image: sentiment-as-a-service:latest
     container_name: sentiment-api
 
-    # ── Port mapping ──────────────────────────────────────────────────────────
-    # HOST:CONTAINER  →  reach the API at http://localhost:8000
     ports:
       - "${HOST_PORT:-8000}:8000"
 
-    # ── Environment variables available inside the container ─────────────────
     environment:
-      # Prevent HuggingFace from trying to reach the internet at runtime.
-      # The model was baked into the image during the build stage.
+
       TRANSFORMERS_OFFLINE: "1"
-      HF_DATASETS_OFFLINE: "1"
-      # Uvicorn log level (debug | info | warning | error | critical)
+    
       LOG_LEVEL: ${LOG_LEVEL:-info}
 
-    # ── Resource limits (tune for your hardware) ──────────────────────────────
     deploy:
       resources:
         limits:
-          # Adjust upward if you see OOM kills during batch inference.
+          
           memory: 2g
         reservations:
           memory: 512m
 
-    # ── Restart policy ────────────────────────────────────────────────────────
+  
     restart: unless-stopped
 
-    # ── Healthcheck (mirrors the HEALTHCHECK in the Dockerfile) ───────────────
-    # Compose uses this to gate dependent services and show status in
-    # `docker compose ps`.
+
     healthcheck:
       test: [ "CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/health')\"" ]
       interval: 30s
       timeout: 10s
-      retries: 3
-      # Give the model time to load before the first probe fires.
+    
       start_period: 60s
 
-    # ── Named volume for the HuggingFace model cache ─────────────────────────
-    # Even though the model is baked into the image, mounting a volume here
-    # means that if you later switch to TRANSFORMERS_OFFLINE=0 the downloaded
-    # weights persist across container restarts and won't be re-fetched.
+ 
     volumes:
       - hf-model-cache:/model-cache
 
-    # ── Logging ───────────────────────────────────────────────────────────────
+   
     logging:
       driver: "json-file"
       options:
         max-size: "10m"
         max-file: "3"
 
-# =============================================================================
-# Named volumes
-# =============================================================================
+
 volumes:
   hf-model-cache:
     driver: local
