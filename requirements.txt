@@ -1,0 +1,19 @@
+# ── Web framework ─────────────────────────────────────────────────────────────
+fastapi>=0.111.0
+uvicorn[standard]>=0.29.0
+
+# ── Data validation ───────────────────────────────────────────────────────────
+pydantic>=2.7.1
+
+# ── ML / NLP ──────────────────────────────────────────────────────────────────
+transformers>=4.40.0
+torch>=2.6.0
+tokenizers>=0.21.0
+sentencepiece>=0.2.0
+
+# ── HuggingFace hub (model downloads) ────────────────────────────────────────
+huggingface-hub>=0.23.0
+safetensors>=0.4.5
+
+# ── HTTP client (used by HF hub) ──────────────────────────────────────────────
+requests>=2.32.0
