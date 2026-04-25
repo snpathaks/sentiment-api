@@ -16,21 +16,15 @@ from transformers import pipeline, Pipeline
 
 logger = logging.getLogger(__name__)
 
-# ---------------------------------------------------------------------------
-# Constants
-# ---------------------------------------------------------------------------
 
-# cardiffnlp/twitter-roberta-base-sentiment-latest is a lightweight yet
-# accurate 3-class model (negative / neutral / positive) that is well-suited
-# for a production service.  Swap the constant to use any compatible model.
 DEFAULT_MODEL = "cardiffnlp/twitter-roberta-base-sentiment-latest"
 
 LABEL_MAP: dict[str, str] = {
-    # Raw labels returned by the model  →  human-readable labels
+   
     "LABEL_0": "negative",
     "LABEL_1": "neutral",
     "LABEL_2": "positive",
-    # Cardiff's newer checkpoint already uses these names, but kept for safety
+
     "negative": "negative",
     "neutral": "neutral",
     "positive": "positive",
@@ -61,9 +55,7 @@ class SentimentModel:
         self.model_name = model_name
         self._pipeline: Pipeline = self._load_pipeline()
 
-    # ------------------------------------------------------------------
-    # Private helpers
-    # ------------------------------------------------------------------
+   
 
     def _load_pipeline(self) -> Pipeline:
         """Download (or load from cache) the model and return a Pipeline."""
@@ -73,11 +65,9 @@ class SentimentModel:
                 task="sentiment-analysis",
                 model=self.model_name,
                 tokenizer=self.model_name,
-                # Return all class scores so callers can inspect full
-                # probability distribution when needed.
+            
                 top_k=None,
-                # Truncate inputs that exceed the model's max sequence length
-                # instead of raising an error.
+             
                 truncation=True,
                 max_length=512,
             )
@@ -106,7 +96,7 @@ class SentimentModel:
             ``raw_label`` – original label string from the model
             ``scores``    – full probability distribution as a dict
         """
-        # Sort descending by score so index-0 is always the winner.
+        
         sorted_scores = sorted(raw, key=lambda d: d["score"], reverse=True)
 
         winner = sorted_scores[0]
@@ -125,9 +115,6 @@ class SentimentModel:
             },
         }
 
-    # ------------------------------------------------------------------
-    # Public API
-    # ------------------------------------------------------------------
 
     def predict(self, text: str) -> dict[str, Any]:
         """
@@ -146,7 +133,7 @@ class SentimentModel:
             raise ValueError("Input text must be a non-empty string.")
 
         raw: list[list[dict[str, Any]]] = self._pipeline([text])
-        # pipeline returns a list-of-lists when top_k is set
+        
         return self._normalise(raw[0])
 
     def predict_batch(self, texts: list[str]) -> list[dict[str, Any]]:
@@ -177,7 +164,7 @@ class SentimentModel:
         for idx, raw in zip(indices, raw_batch):
             results[idx] = self._normalise(raw)
 
-        return results  # type: ignore[return-value]
+        return results  
 
     @property
     def info(self) -> dict[str, str]:
@@ -189,9 +176,7 @@ class SentimentModel:
         }
 
 
-# ---------------------------------------------------------------------------
-# Module-level singleton (lazy, cached)
-# ---------------------------------------------------------------------------
+
 
 
 @lru_cache(maxsize=1)
