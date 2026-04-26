@@ -17,3 +17,6 @@ safetensors>=0.4.5
 
 # HTTP client (used by HF hub) 
 requests>=2.32.0
+
+# Required by transformers (not auto-installed to custom prefix)
+packaging>=23.0
