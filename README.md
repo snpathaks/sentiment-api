@@ -4,7 +4,7 @@ A production-ready, high-performance REST API for sentiment analysis, powered by
 
 This service provides an industrial-grade wrapper around the `cardiffnlp/twitter-roberta-base-sentiment-latest` model, offering multi-stage Docker builds and efficient batch processing.
 
-## 🚀 Key Features
+## 🚀 Key Features::
 
 * **Optimized Inference**: Uses a singleton model pattern with `lru_cache` to ensure the heavy transformer model is loaded exactly once.
 * **Batch Processing**: Includes a dedicated `/analyze/batch` endpoint that processes up to 64 texts in a single model forward-pass for significantly higher throughput.
