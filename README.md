@@ -1,4 +1,4 @@
-# Sentiment-as-a-Service (sentiment-api)
+# Sentiment-as-a-Service (sentiment-api)::
 
 A production-ready, high-performance REST API for sentiment analysis, powered by **FastAPI** and **HuggingFace Transformers**.
 
