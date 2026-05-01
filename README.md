@@ -21,7 +21,7 @@ This service provides an industrial-grade wrapper around the `cardiffnlp/twitter
 * **Server**: Uvicorn
 * **Deployment**: Docker & Docker Compose
 
-## 📋 API Endpoints
+## 📋 API Endpoints::
 
 | Method | Endpoint | Description |
 | :--- | :--- | :--- |
