@@ -13,7 +13,7 @@ This service provides an industrial-grade wrapper around the `cardiffnlp/twitter
     * **Strict Validation**: Pydantic models enforce character limits (5,000 per text) and validate against blank inputs.
     * **Health Checks**: Integrated liveness probes for Docker/Kubernetes orchestration.
 
-## 🛠 Tech Stack
+## 🛠 Tech Stack::
 
 * **Framework**: FastAPI
 * **Machine Learning**: HuggingFace Transformers, PyTorch
