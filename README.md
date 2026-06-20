@@ -30,7 +30,7 @@ This service provides an industrial-grade wrapper around the `cardiffnlp/twitter
 | `POST` | `/analyze` | Analyze a single string; returns label, confidence score, and full distribution. |
 | `POST` | `/analyze/batch` | Analyze up to 64 strings simultaneously for maximum efficiency. |
 
-## 🐳 Docker Deployment:
+## 🐳 Docker Deployment::
 
 The service is designed to be deployed via Docker Compose. It includes a 2GB memory limit and persistent volume mounting for the HuggingFace model cache.
 
